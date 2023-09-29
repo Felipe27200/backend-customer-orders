@@ -11,12 +11,14 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('customers', function (Blueprint $table) {
+        Schema::create('orders', function (Blueprint $table) {
             $table->id();
-            $table->string("name", 255);
-            $table->unsignedBigInteger("document");
-            $table->tinyInteger("document_type");
-            
+            $table->unsignedBigInteger("customer_id");
+            $table->date("delivery_date")->nullable();
+            $table->enum("status", ["en bodega", "empacado", "en camino", "entregando"])->default("en bodega");
+
+            $table->foreign("customer_id")->references("id")->on("customers");
+
             $table->timestamps();
         });
     }
@@ -26,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('customers');
+        Schema::dropIfExists('orders');
     }
 };
