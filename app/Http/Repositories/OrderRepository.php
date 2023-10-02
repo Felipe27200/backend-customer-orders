@@ -12,14 +12,14 @@ class OrderRepository
 
         if (empty($orderCode))
         {
-            $orders = Customer::with("orders.details")
+            $orders = Customer::with("orders.details.product")
                         ->where("document", $document)
                         ->where("document_type", $document_type)
                         ->get();
         }
         else
         {
-            $orders = Order::with("details", "customer")
+            $orders = Order::with("details.product", "customer")
                 ->where("id", $orderCode)
                 ->whereHas("customer", function ($query) use ($document, $document_type) {
                     $query->where("document", $document)

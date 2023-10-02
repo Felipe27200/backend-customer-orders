@@ -21,6 +21,7 @@ class OrderFactory extends Factory
         return [
             "customer_id" => fake()->numberBetween(1, 10),
             "delivery_date" => fake()->date(),
+            "delivery_address" => fake()->streetAddress(),
             "status" => fake()->randomElement(["en bodega", "empacado", "en camino", "entregando"]),
         ];
     }

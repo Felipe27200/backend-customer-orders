@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('orders', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger("customer_id");
+            $table->string("delivery_address");
             $table->date("delivery_date")->nullable();
             $table->enum("status", ["en bodega", "empacado", "en camino", "entregando"])->default("en bodega");
 
