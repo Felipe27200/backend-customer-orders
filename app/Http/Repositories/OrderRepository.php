@@ -19,7 +19,12 @@ class OrderRepository
         }
         else
         {
-            $orders = Order::with("details.product", "customer")
+            $order = Order::find($orderCode);
+            
+            if (!isset($order))
+                return $this->responseNotFound("Order");
+
+            $orders = $order->with("details.product", "customer")
                 ->where("id", $orderCode)
                 ->whereHas("customer", function ($query) use ($document, $document_type) {
                     $query->where("document", $document)
@@ -29,20 +34,21 @@ class OrderRepository
         }
 
         if (empty($orders) || count($orders) <= 0)
-        {
-            return response()->json([
-                "response" => "unsuccessful",
-                "message" => "Order Not Found, please verify the information.",
-            ]);
-        }
-        else
-        {
-            return response()->json([
-                "response" => "successful",
-                "message" => "Customer Orders",
-                "data" => $orders
-            ]);
-        }
+            return $this->responseNotFound("Customer");
+
+        return response()->json([
+            "response" => "successful",
+            "message" => "Customer Orders",
+            "data" => $orders
+        ]);
+    }
+
+    public function responseNotFound($name)
+    {
+        return response()->json([
+            "response" => "unsuccessful",
+            "message" => "$name Not Found, please verify the information.",
+        ]);
     }
 }
 
